@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Apex University Chatbot Management</title>
+    <meta name="description" content="College chatbot administrative dashboard to manage AI questions, answers, syllabus documents, fee structures, and campus media.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/jpeg" href="assets/bot-avatar.jpg">
+</head>
+<body>
+
+    <!-- Admin Navigation Header -->
+    <header class="top-nav">
+        <a href="admin.html" class="brand-logo" id="adminHomeLogo">
+            <img src="assets/bot-avatar.jpg" alt="CampusBot" class="brand-avatar">
+            <div class="brand-text">
+                <h1>CampusBot Admin</h1>
+                <span><span class="status-dot"></span> Knowledge Base & Analytics Hub</span>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <a href="student.html" class="btn btn-secondary btn-sm" id="testChatBtn" target="_blank">
+                💬 Open Student Chat
+            </a>
+            <div class="user-badge" id="adminUserDisplay">
+                <span>🛡️</span>
+                <span id="adminNameLabel">Administrator</span>
+                <span class="role-pill admin">Admin</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="logout()" id="adminLogoutBtn">
+                Sign Out 🚪
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-container">
+
+        <!-- Real-Time Metric Stat Cards -->
+        <div class="admin-stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">📖</div>
+                <div>
+                    <div class="stat-value" id="statTotalResponses">13</div>
+                    <div class="stat-label">Knowledge Items</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">🏷️</div>
+                <div>
+                    <div class="stat-value" id="statCategories">5</div>
+                    <div class="stat-label">Active Categories</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon emerald">👥</div>
+                <div>
+                    <div class="stat-value" id="statUsers">2</div>
+                    <div class="stat-label">Registered Accounts</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber">⚡</div>
+                <div>
+                    <div class="stat-value" id="statQueries">128</div>
+                    <div class="stat-label">Queries Handled</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Workspace Split Layout -->
+        <div class="admin-layout">
+
+            <!-- Left Panel: Create / Edit Knowledge Item -->
+            <div class="admin-form-panel">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+                    <h3 id="formTitle">➕ Add New FAQ Response</h3>
+                    <span id="editModeIndicator" style="display:none;font-size:0.75rem;padding:0.2rem 0.5rem;background:var(--amber);color:#000;border-radius:4px;font-weight:700;">
+                        EDITING
+                    </span>
+                </div>
+
+                <input type="hidden" id="editIndex" value="-1">
+
+                <div class="form-group">
+                    <label for="keywordInput">Primary Trigger Keyword *</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">🔑</span>
+                        <input type="text" id="keywordInput" class="form-control" placeholder="e.g. syllabus, hostel, fees" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="aliasesInput">Alternative Keywords (Comma separated)</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">🏷️</span>
+                        <input type="text" id="aliasesInput" class="form-control" placeholder="e.g. courses, curriculum, subjects">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryInput">Category</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">📂</span>
+                        <select id="categoryInput" class="form-control">
+                            <option value="Academics">Academics & Courses</option>
+                            <option value="Admissions & Fees">Admissions & Fees</option>
+                            <option value="Campus Life">Campus Life & Hostels</option>
+                            <option value="Facilities">Facilities & Library</option>
+                            <option value="Placements">Placements & Internships</option>
+                            <option value="General">General Enquiries</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="responseInput">Chatbot Detailed Answer *</label>
+                    <textarea id="responseInput" class="form-control" rows="4" placeholder="Enter clear, helpful answer that the bot will reply with..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Attach Image (Campus picture, diagram, etc.)</label>
+                    <input type="file" id="imageFileInput" class="form-control" accept="image/*" style="padding-left:1rem;margin-bottom:0.4rem;">
+                    <input type="text" id="imageUrlInput" class="form-control" placeholder="Or enter Image URL (e.g. assets/campus-view.jpg)" style="padding-left:1rem;">
+                </div>
+
+                <div class="form-group">
+                    <label>Attach File (Syllabus PDF / Doc Notice)</label>
+                    <input type="file" id="docFileInput" class="form-control" accept=".pdf,.doc,.docx,.txt" style="padding-left:1rem;">
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button class="btn btn-primary" onclick="saveResponse()" id="saveResponseBtn">
+                        💾 Save Response
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetForm()" id="cancelEditBtn" style="display:none;width:auto;">
+                        Cancel
+                    </button>
+                </div>
+
+                <!-- Reset Knowledge Base -->
+                <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
+                    <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem;">System Maintenance:</div>
+                    <button class="btn btn-secondary btn-sm" style="width: 100%; border-color: rgba(244, 63, 94, 0.4); color: #fca5a5;" onclick="confirmResetDefaults()">
+                        🔄 Reset Knowledge Base to College Defaults
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: All Knowledge Entries List -->
+            <div class="admin-list-panel">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                    <h3>All Knowledge Base Responses (<span id="responseCountBadge">0</span>)</h3>
+                </div>
+
+                <!-- Search and Category Filter -->
+                <div class="search-filter-bar">
+                    <div class="search-input-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchQABox" placeholder="Search by keyword, response, or category..." oninput="filterResponses()">
+                    </div>
+                    <select id="filterCategorySelect" class="filter-select" onchange="filterResponses()">
+                        <option value="ALL">All Categories</option>
+                        <option value="Academics">Academics</option>
+                        <option value="Admissions & Fees">Admissions & Fees</option>
+                        <option value="Campus Life">Campus Life</option>
+                        <option value="Facilities">Facilities</option>
+                        <option value="Placements">Placements</option>
+                        <option value="General">General</option>
+                    </select>
+                </div>
+
+                <!-- Dynamic Response Cards List -->
+                <div id="responseList" class="response-card-list">
+                    <!-- Populated dynamically via admin.js -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="college-data.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

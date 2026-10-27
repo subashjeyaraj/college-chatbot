@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex University - Smart Campus AI Assistant</title>
+    <meta name="description" content="Official AI-powered college portal chatbot for students, faculty, and administration. Get instant answers about syllabus, fees, exams, placements, and campus amenities.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/jpeg" href="assets/bot-avatar.jpg">
+</head>
+<body>
+
+    <!-- Main Navigation Header -->
+    <header class="top-nav">
+        <a href="index.html" class="brand-logo" id="homeLogoLink">
+            <img src="assets/bot-avatar.jpg" alt="CampusBot" class="brand-avatar">
+            <div class="brand-text">
+                <h1>CampusBot AI</h1>
+                <span><span class="status-dot"></span> Apex University Portal</span>
+            </div>
+        </a>
+        <div class="nav-actions">
+            <button class="btn btn-secondary btn-sm" onclick="loginAsGuest()" id="guestQuickBtn">
+                ⚡ Guest Access
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-container">
+        <div class="auth-wrapper">
+            <div class="glass-card">
+                
+                <!-- Mascot & Portal Header -->
+                <div class="auth-header">
+                    <img src="assets/bot-avatar.jpg" alt="College Chatbot Mascot" class="auth-avatar">
+                    <h2>Campus Portal Login</h2>
+                    <p>Access your personalized student assistant & academic tools</p>
+                </div>
+
+                <!-- Segmented Tabs (Login / Register) -->
+                <div class="segmented-control">
+                    <button class="segmented-btn active" id="tabLogin" onclick="showLogin()">Sign In</button>
+                    <button class="segmented-btn" id="tabRegister" onclick="showRegister()">Register</button>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label>Select Portal Role</label>
+                        <div class="role-selector">
+                            <label class="role-option">
+                                <input type="radio" name="loginRole" value="student" checked>
+                                <div class="role-card">
+                                    <span class="icon">🎓</span>
+                                    <span class="title">Student</span>
+                                </div>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="loginRole" value="admin">
+                                <div class="role-card">
+                                    <span class="icon">🛡️</span>
+                                    <span class="title">Admin</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginUsername">Username / Student ID</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="loginUsername" class="form-control" placeholder="Enter username (e.g. student or admin)" autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="login()" id="loginSubmitBtn">
+                        Sign In to Portal →
+                    </button>
+                </div>
+
+                <!-- REGISTER FORM -->
+                <div id="registerForm" style="display: none;">
+                    <div class="form-group">
+                        <label>Choose Account Role</label>
+                        <div class="role-selector">
+                            <label class="role-option">
+                                <input type="radio" name="registerRole" value="student" checked>
+                                <div class="role-card">
+                                    <span class="icon">🎓</span>
+                                    <span class="title">Student</span>
+                                </div>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="registerRole" value="admin">
+                                <div class="role-card">
+                                    <span class="icon">🛡️</span>
+                                    <span class="title">Admin</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">✨</span>
+                            <input type="text" id="registerName" class="form-control" placeholder="e.g. John Doe">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerUsername">Create Username</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="registerUsername" class="form-control" placeholder="Choose unique username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Create Password</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="registerPassword" class="form-control" placeholder="Minimum 4 characters">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="register()" id="registerSubmitBtn">
+                        Create Account →
+                    </button>
+                </div>
+
+                <!-- 1-Click Fast Demo Logins -->
+                <div class="demo-box">
+                    <div class="demo-title">⚡ Instant 1-Click Demo Accounts</div>
+                    <div class="demo-buttons">
+                        <button class="btn-demo" onclick="loginAsDemo('student')" id="demoStudentBtn">
+                            <span>🎓 Demo Student</span>
+                            <strong>student / student123</strong>
+                        </button>
+                        <button class="btn-demo" onclick="loginAsDemo('admin')" id="demoAdminBtn">
+                            <span>🛡️ Demo Admin</span>
+                            <strong>admin / admin123</strong>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="college-data.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Check if user is already logged in
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = CollegeStorage.getCurrentUser();
+            if (user) {
+                // Pre-fill username if available
+                const uInput = document.getElementById("loginUsername");
+                if (uInput) uInput.value = user.username;
+            }
+
+            // Enter key trigger
+            const passInput = document.getElementById("loginPassword");
+            if (passInput) {
+                passInput.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") login();
+                });
+            }
+
+            const regPassInput = document.getElementById("registerPassword");
+            if (regPassInput) {
+                regPassInput.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") register();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Chatbot - Apex University AI Portal</title>
+    <meta name="description" content="Instant 24/7 student AI assistant for courses, syllabus, fee structure, exam dates, hostel guidelines, and campus events.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/jpeg" href="assets/bot-avatar.jpg">
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+        <a href="index.html" class="brand-logo" id="studentHomeLogo">
+            <img src="assets/bot-avatar.jpg" alt="CampusBot" class="brand-avatar">
+            <div class="brand-text">
+                <h1>CampusBot AI</h1>
+                <span><span class="status-dot"></span> Student Academic Concierge</span>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <div class="user-badge" id="currentUserDisplay">
+                <span>🎓</span>
+                <span id="userNameLabel">Student</span>
+                <span class="role-pill student">Student</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="logout()" id="studentLogoutBtn">
+                Sign Out 🚪
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Two-Column Layout -->
+    <div class="chat-page-layout">
+
+        <!-- Sidebar Navigation -->
+        <aside class="chat-sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-title">
+                    <span>💡</span> Popular Topics
+                </div>
+                <div class="topic-list">
+                    <button class="topic-item" onclick="sendPrompt('Tell me about the academic syllabus and courses')">
+                        <span class="icon">📚</span>
+                        <span>Academic Syllabus</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('Show me the campus map and locations')">
+                        <span class="icon">🗺️</span>
+                        <span>Campus Map & Buildings</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('What is the fee structure and due date?')">
+                        <span class="icon">💰</span>
+                        <span>Fee Structure & Dues</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('When are the semester exams scheduled?')">
+                        <span class="icon">📅</span>
+                        <span>Exam Schedule</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('Tell me about placement records and highest package')">
+                        <span class="icon">🚀</span>
+                        <span>Placements & Packages</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('What are the hostel rules and fees?')">
+                        <span class="icon">🏢</span>
+                        <span>Hostel & Mess Life</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('Tell me about scholarships and eligibility')">
+                        <span class="icon">✨</span>
+                        <span>Scholarships & Aid</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('What are the central library timings?')">
+                        <span class="icon">📖</span>
+                        <span>Library Timings</span>
+                    </button>
+                    <button class="topic-item" onclick="sendPrompt('Give me the important contact numbers and helplines')">
+                        <span class="icon">📞</span>
+                        <span>Campus Helplines</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Actions & Tools -->
+            <div class="sidebar-card" style="margin-top: auto;">
+                <div class="sidebar-title">
+                    <span>⚙️</span> Chat Management
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button class="btn btn-secondary btn-sm" style="width: 100%;" onclick="clearChatHistory()">
+                        🗑️ Clear Chat History
+                    </button>
+                    <button class="btn btn-secondary btn-sm" style="width: 100%;" onclick="exportChatTranscript()">
+                        📥 Export Chat Transcript
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Section -->
+        <main class="chat-main">
+            <!-- Chat Window Header -->
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <img src="assets/bot-avatar.jpg" alt="Bot Avatar" class="chat-header-avatar">
+                    <div class="chat-header-text">
+                        <h3>CampusBot Assistant</h3>
+                        <p><span class="status-dot"></span> Online • Responds in seconds</p>
+                    </div>
+                </div>
+
+                <div class="chat-controls">
+                    <button class="icon-btn" onclick="toggleSpeechOutput()" id="speechToggleBtn" title="Toggle Voice Speech Output">
+                        🔊
+                    </button>
+                    <button class="icon-btn" onclick="clearChatHistory()" title="Clear Messages">
+                        🔄
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Suggestion Chips Carousel -->
+            <div class="quick-chips-wrapper">
+                <button class="chip-btn" onclick="sendPrompt('syllabus')">📚 Syllabus</button>
+                <button class="chip-btn" onclick="sendPrompt('campus map')">🗺️ Campus Map</button>
+                <button class="chip-btn" onclick="sendPrompt('fee structure')">💰 Fee Structure</button>
+                <button class="chip-btn" onclick="sendPrompt('exam schedule')">📅 Exam Dates</button>
+                <button class="chip-btn" onclick="sendPrompt('placement package')">🚀 Placements</button>
+                <button class="chip-btn" onclick="sendPrompt('hostel room')">🏢 Hostel & Mess</button>
+                <button class="chip-btn" onclick="sendPrompt('library hours')">📖 Library</button>
+                <button class="chip-btn" onclick="sendPrompt('scholarship')">✨ Scholarships</button>
+                <button class="chip-btn" onclick="sendPrompt('contact helplines')">📞 Emergency</button>
+            </div>
+
+            <!-- Chat Message History -->
+            <div id="chatBox" class="chat-messages">
+                <!-- Welcome Bot Message -->
+                <div class="message-row bot">
+                    <img src="assets/bot-avatar.jpg" alt="Bot Avatar" class="msg-avatar">
+                    <div class="message-bubble">
+                        👋 <strong>Hello! I am CampusBot, your 24/7 Apex University AI Assistant.</strong><br><br>
+                        Ask me anything about <strong>courses, syllabus, exam timetables, fee payments, hostel rooms, placements, or scholarships</strong>.<br><br>
+                        <em>Tip: Click any suggested topic or type your query below!</em>
+                        <span class="msg-timestamp">Just now</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.35rem;">CampusBot is typing...</span>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chat-input-bar">
+                <button class="mic-btn" id="micBtn" onclick="toggleSpeechRecognition()" title="Voice Typing (Speak your question)">
+                    🎙️
+                </button>
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    class="chat-input-field" 
+                    placeholder="Type a college question (e.g., 'What is the syllabus?', 'Hostel fees', 'Exam dates')..."
+                    autocomplete="off"
+                >
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send Message">
+                    ➤
+                </button>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal-overlay" id="imageModal" onclick="closeImageModal()">
+        <img src="" alt="Preview" class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Scripts -->
+    <script src="college-data.js"></script>
+    <script src="auth.js"></script>
+    <script src="student.js"></script>
+</body>
+</html>
